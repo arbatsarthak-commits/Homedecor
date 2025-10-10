@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Products — Jiyu's HomeDecor</title>
+  <style>
+    :root{
+      --bg: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      --card: rgba(255,255,255,0.98);
+      --muted: #6b7280;
+      --accent: #e91e63;
+      --accent-light: #fce4ec;
+      --secondary: #9c27b0;
+      --radius: 20px;
+      --shadow: 0 25px 50px rgba(0,0,0,0.15);
+      --gap: 24px;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background: var(--bg);
+      background-image: 
+        radial-gradient(circle at 15% 85%, rgba(233,30,99,0.15) 0%, transparent 60%),
+        radial-gradient(circle at 85% 15%, rgba(156,39,176,0.15) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(102,126,234,0.1) 0%, transparent 70%),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="wall" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23wall)"/></svg>');
+      color: #1a1a1a;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Animated background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .floating-shape {
+      position: absolute;
+      background: rgba(255,255,255,0.1);
+      animation: float 30s infinite linear;
+      border: 2px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    .floating-shape:nth-child(1) { 
+      width: 80px; height: 80px; top: 15%; left: 8%; animation-delay: 0s; border-radius: 50%;
+      background: linear-gradient(45deg, rgba(233,30,99,0.2), rgba(156,39,176,0.2));
+      box-shadow: 0 8px 32px rgba(233,30,99,0.3);
+    }
+    .floating-shape:nth-child(2) { 
+      width: 100px; height: 60px; top: 65%; right: 12%; animation-delay: -10s; border-radius: 30px;
+      background: linear-gradient(45deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
+      box-shadow: 0 8px 32px rgba(102,126,234,0.3);
+    }
+    .floating-shape:nth-child(3) { 
+      width: 60px; height: 60px; top: 85%; left: 15%; animation-delay: -20s; border-radius: 50%;
+      background: linear-gradient(45deg, rgba(240,147,251,0.2), rgba(233,30,99,0.2));
+      box-shadow: 0 8px 32px rgba(240,147,251,0.3);
+    }
+    .floating-shape:nth-child(4) { 
+      width: 70px; height: 70px; top: 8%; right: 25%; animation-delay: -25s; border-radius: 20px;
+      background: linear-gradient(45deg, rgba(156,39,176,0.2), rgba(102,126,234,0.2));
+      box-shadow: 0 8px 32px rgba(156,39,176,0.3);
+    }
+    .floating-shape:nth-child(5) { 
+      width: 50px; height: 50px; top: 45%; left: 75%; animation-delay: -15s; border-radius: 50%;
+      background: linear-gradient(45deg, rgba(102,126,234,0.2), rgba(240,147,251,0.2));
+      box-shadow: 0 8px 32px rgba(102,126,234,0.3);
+    }
+    .floating-shape:nth-child(6) { 
+      width: 90px; height: 90px; top: 75%; right: 55%; animation-delay: -5s; border-radius: 25px;
+      background: linear-gradient(45deg, rgba(240,147,251,0.2), rgba(156,39,176,0.2));
+      box-shadow: 0 8px 32px rgba(240,147,251,0.3);
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+      100% { transform: translateY(0px) rotate(360deg); }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px 30px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #dc2626, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .nav a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 2px solid transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .nav a:hover {
+      background: linear-gradient(135deg, rgba(233,30,99,0.8), rgba(156,39,176,0.8));
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(233,30,99,0.4);
+      border-color: rgba(255,255,255,0.3);
+      color: white;
+    }
+    
+    .nav a.active {
+      background: linear-gradient(135deg, #e91e63, #9c27b0);
+      color: white;
+      box-shadow: 0 8px 20px rgba(233,30,99,0.5);
+      border-color: rgba(255,255,255,0.4);
+    }
+    
+    .nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .nav a:hover::before {
+      left: 100%;
+    }
+    
+    .nav a::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+    }
+    
+    .nav a:hover::after {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .cart-btn {
+      background: linear-gradient(135deg, #e91e63, #9c27b0);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.2);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 20px rgba(233,30,99,0.3);
+    }
+    
+    .cart-btn:hover {
+      background: linear-gradient(135deg, #c2185b, #7b1fa2);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(233,30,99,0.5);
+      border-color: rgba(255,255,255,0.4);
+    }
+    
+    .cart-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .cart-btn:hover::before {
+      left: 100%;
+    }
+    
+    .cart-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+    }
+    
+    .cart-btn:hover::after {
+      width: 120px;
+      height: 120px;
+    }
+    
+    .badge {
+      background: #fbbf24;
+      color: #92400e;
+      padding: 4px 8px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      min-width: 20px;
+      text-align: center;
+    }
+    
+    .page-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 50px;
+    }
+    
+    .page-header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .page-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .filters {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: var(--radius);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .filter-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filter-group label {
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .filter-select, .filter-input {
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 0.9rem;
+      min-width: 150px;
+    }
+    
+    .filter-select option {
+      background: #1f2937;
+      color: white;
+    }
+    
+    .filter-input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    
+    .product-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 25px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+    }
+    
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #f59e0b);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      transition: transform 0.4s ease;
+    }
+    
+    .product-card:hover .product-image {
+      transform: scale(1.1);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--accent);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+    
+    .product-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1f2937;
+      transition: color 0.3s ease;
+    }
+    
+    .product-card:hover .product-title {
+      color: var(--accent);
+    }
+    
+    .product-desc {
+      color: var(--muted);
+      margin-bottom: 15px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .product-price {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .original-price {
+      font-size: 1.2rem;
+      color: var(--muted);
+      text-decoration: line-through;
+      font-weight: 500;
+    }
+    
+    .discount {
+      background: #10b981;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover .product-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border: 2px solid var(--accent);
+    }
+    
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 50px;
+    }
+    
+    .page-btn {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .page-btn:hover, .page-btn.active {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .loading {
+      text-align: center;
+      color: white;
+      font-size: 1.2rem;
+      padding: 50px;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-group {
+        width: 100%;
+      }
+      
+      .filter-select, .filter-input {
+        width: 100%;
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        <h1>Jiyu's HomeDecor</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="products.html" class="active">Products</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="cart.html" class="cart-btn">
+          🛒 Cart <span class="badge" id="cartCount">0</span>
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-header">
+        <h1>Our Products</h1>
+        <p>Discover our curated collection of premium Indian home decor</p>
+      </div>
+
+      <div class="filters">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="category">Category</label>
+            <select id="category" class="filter-select">
+              <option value="">All Categories</option>
+              <option value="wall-decor">Wall Decor</option>
+              <option value="planters">Planters</option>
+              <option value="lighting">Lighting</option>
+              <option value="storage">Storage</option>
+              <option value="candles">Candles</option>
+              <option value="frames">Frames</option>
+              <option value="cushions">Cushions</option>
+              <option value="crafts">Crafts</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="price">Price Range</label>
+            <select id="price" class="filter-select">
+              <option value="">All Prices</option>
+              <option value="0-150">Under ₹150</option>
+              <option value="150-300">₹150 - ₹300</option>
+              <option value="300-500">₹300 - ₹500</option>
+              <option value="500+">Above ₹500</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="search">Search</label>
+            <input type="text" id="search" class="filter-input" placeholder="Search products...">
+          </div>
+        </div>
+      </div>
+
+      <div id="productsContainer">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading products...
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination will be generated by JavaScript -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Product data with Indian pricing
+    const PRODUCTS = [
+      {
+        id: 'p1',
+        title: 'Decorative Wall Hanging',
+        price: 299,
+        originalPrice: 399,
+        category: 'wall-decor',
+        img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=400&auto=format&fit=crop',
+        desc: 'Beautiful macrame wall hanging with wooden beads. Perfect for living room or bedroom.',
+        badge: 'Best Seller',
+        rating: 4.8,
+        reviews: 124
+      },
+      {
+        id: 'p2',
+        title: 'Ceramic Plant Pot',
+        price: 199,
+        originalPrice: 299,
+        category: 'planters',
+        img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?q=80&w=400&auto=format&fit=crop',
+        desc: 'Handcrafted ceramic pot with drainage hole. Ideal for small plants and succulents.',
+        badge: 'New',
+        rating: 4.6,
+        reviews: 89
+      },
+      {
+        id: 'p3',
+        title: 'Bamboo Table Lamp',
+        price: 450,
+        originalPrice: 599,
+        category: 'lighting',
+        img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
+        desc: 'Eco-friendly bamboo table lamp with warm LED light. Creates cozy ambiance.',
+        badge: 'Eco-Friendly',
+        rating: 4.7,
+        reviews: 156
+      },
+      {
+        id: 'p4',
+        title: 'Woven Storage Basket',
+        price: 350,
+        originalPrice: 450,
+        category: 'storage',
+        img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=400&auto=format&fit=crop',
+        desc: 'Handwoven jute storage basket. Perfect for organizing magazines, toys, or blankets.',
+        badge: 'Handmade',
+        rating: 4.5,
+        reviews: 78
+      },
+      {
+        id: 'p5',
+        title: 'Decorative Candle Set',
+        price: 199,
+        originalPrice: 299,
+        category: 'candles',
+        img: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=400&auto=format&fit=crop',
+        desc: 'Set of 3 scented candles in different sizes. Vanilla and lavender fragrance.',
+        badge: 'Set',
+        rating: 4.4,
+        reviews: 92
+      },
+      {
+        id: 'p6',
+        title: 'Wooden Photo Frame',
+        price: 149,
+        originalPrice: 199,
+        category: 'frames',
+        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400&auto=format&fit=crop',
+        desc: 'Handcrafted wooden photo frame with rustic finish. Perfect for family memories.',
+        badge: 'Rustic',
+        rating: 4.6,
+        reviews: 145
+      },
+      {
+        id: 'p7',
+        title: 'Macrame Plant Hanger',
+        price: 249,
+        originalPrice: 349,
+        category: 'planters',
+        img: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?q=80&w=400&auto=format&fit=crop',
+        desc: 'Handmade macrame plant hanger with wooden ring. Perfect for hanging plants.',
+        badge: 'Handmade',
+        rating: 4.5,
+        reviews: 67
+      },
+      {
+        id: 'p8',
+        title: 'Decorative Mirror',
+        price: 399,
+        originalPrice: 499,
+        category: 'wall-decor',
+        img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=400&auto=format&fit=crop',
+        desc: 'Round decorative mirror with wooden frame. Adds elegance to any wall.',
+        badge: 'Elegant',
+        rating: 4.7,
+        reviews: 98
+      },
+      {
+        id: 'p9',
+        title: 'Cozy Throw Pillow',
+        price: 179,
+        originalPrice: 249,
+        category: 'cushions',
+        img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=400&auto=format&fit=crop',
+        desc: 'Soft throw pillow with geometric pattern. Perfect for sofa or bed.',
+        badge: 'Cozy',
+        rating: 4.6,
+        reviews: 112
+      },
+      {
+        id: 'p10',
+        title: 'String Art Kit',
+        price: 129,
+        originalPrice: 179,
+        category: 'crafts',
+        img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=400&auto=format&fit=crop',
+        desc: 'DIY string art kit with wooden board and colorful threads. Fun craft project.',
+        badge: 'DIY',
+        rating: 4.3,
+        reviews: 56
+      },
+      {
+        id: 'p11',
+        title: 'Decorative Tray',
+        price: 229,
+        originalPrice: 299,
+        category: 'accessories',
+        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400&auto=format&fit=crop',
+        desc: 'Wooden decorative tray with handles. Perfect for serving or organizing items.',
+        badge: 'Versatile',
+        rating: 4.4,
+        reviews: 73
+      },
+      {
+        id: 'p12',
+        title: 'Fairy Lights',
+        price: 99,
+        originalPrice: 149,
+        category: 'lighting',
+        img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
+        desc: 'Warm white fairy lights with 20 LED bulbs. Perfect for creating cozy atmosphere.',
+        badge: 'Cozy',
+        rating: 4.8,
+        reviews: 189
+      }
+    ];
+
+    // Cart functionality
+    const CART_KEY = 'jiyu_cart_v1';
+    
+    function loadCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch(e) {
+        return [];
+      }
+    }
+    
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+    
+    function updateCartCount() {
+      const cart = loadCart();
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cartCount').textContent = total;
+    }
+    
+    function addToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+      
+      const cart = loadCart();
+      const existingItem = cart.find(item => item.id === productId);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ 
+          id: productId, 
+          title: product.title,
+          price: product.price,
+          originalPrice: product.originalPrice,
+          img: product.img,
+          desc: product.desc,
+          category: product.category,
+          badge: product.badge,
+          rating: product.rating,
+          reviews: product.reviews,
+          quantity: 1 
+        });
+      }
+      
+      saveCart(cart);
+      updateCartCount();
+      
+      // Show success animation
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = 'Added!';
+      btn.style.background = '#10b981';
+      btn.style.color = 'white';
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 2000);
+    }
+    
+    // Filter and search functionality
+    let filteredProducts = [...PRODUCTS];
+    let currentPage = 1;
+    const productsPerPage = 6;
+    
+    function filterProducts() {
+      const category = document.getElementById('category').value;
+      const priceRange = document.getElementById('price').value;
+      const searchTerm = document.getElementById('search').value.toLowerCase();
+      
+      filteredProducts = PRODUCTS.filter(product => {
+        const matchesCategory = !category || product.category === category;
+        const matchesSearch = !searchTerm || 
+          product.title.toLowerCase().includes(searchTerm) ||
+          product.desc.toLowerCase().includes(searchTerm);
+        
+        let matchesPrice = true;
+        if (priceRange) {
+          const [min, max] = priceRange.split('-').map(p => p === '+' ? Infinity : parseInt(p));
+          matchesPrice = product.price >= min && product.price <= max;
+        }
+        
+        return matchesCategory && matchesSearch && matchesPrice;
+      });
+      
+      currentPage = 1;
+      renderProducts();
+    }
+    
+    function renderProducts() {
+      const container = document.getElementById('productsContainer');
+      const startIndex = (currentPage - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+      const pageProducts = filteredProducts.slice(startIndex, endIndex);
+      
+      if (pageProducts.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: white; padding: 50px;">
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search terms</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = pageProducts.map(product => `
+        <div class="product-card" onclick="viewProduct('${product.id}')">
+          ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+          <img src="${product.img}" alt="${product.title}" class="product-image">
+          <h3 class="product-title">${product.title}</h3>
+          <p class="product-desc">${product.desc}</p>
+          <div class="product-price">
+            ₹${product.price.toLocaleString()}
+            ${product.originalPrice ? `<span class="original-price">₹${product.originalPrice.toLocaleString()}</span>` : ''}
+            ${product.originalPrice ? `<span class="discount">${Math.round((1 - product.price/product.originalPrice) * 100)}% OFF</span>` : ''}
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to Cart</button>
+            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewProduct('${product.id}')">View Details</button>
+          </div>
+        </div>
+      `).join('');
+      
+      renderPagination();
+    }
+    
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+      const pagination = document.getElementById('pagination');
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+      
+      let paginationHTML = '';
+      
+      // Previous button
+      paginationHTML += `
+        <button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+          ← Previous
+        </button>
+      `;
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+          paginationHTML += `
+            <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+              ${i}
+            </button>
+          `;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+          paginationHTML += `<span class="page-btn" style="pointer-events: none;">...</span>`;
+        }
+      }
+      
+      // Next button
+      paginationHTML += `
+        <button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+          Next →
+        </button>
+      `;
+      
+      pagination.innerHTML = paginationHTML;
+    }
+    
+    function changePage(page) {
+      const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+      if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    function viewProduct(productId) {
+      // For now, just show an alert. In a real app, this would navigate to a product detail page
+      const product = PRODUCTS.find(p => p.id === productId);
+      alert(`Viewing details for: ${product.title}\nPrice: ₹${product.price.toLocaleString()}\nRating: ${product.rating}/5 (${product.reviews} reviews)`);
+    }
+    
+    // Event listeners
+    document.getElementById('category').addEventListener('change', filterProducts);
+    document.getElementById('price').addEventListener('change', filterProducts);
+    document.getElementById('search').addEventListener('input', filterProducts);
+    
+    // Initialize
+    updateCartCount();
+    renderProducts();
+  </script>
+</body>
+</html>
